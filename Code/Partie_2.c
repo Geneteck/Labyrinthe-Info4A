@@ -88,28 +88,70 @@ void affiche()
 int Pile[L*M];
 int Sommet;
 
-
 // Partie 2 du Projet
 
 //empile un entier
-void push(int x)
-{
-
+void push(int x)    
+{   
+    Pile[Sommet] = x;
+    Sommet++; 
 }
 
 //depile un entier et le retourne
 int pop()
-{
-    return 0;
+{   
+    Sommet--; 
+    int val = Pile[Sommet];
+    return val;
 }
 
+// dépile un entier et le retournes
+int connexe()
+{   
+    int CaseB, CaseMarq, verif, id = 0;
 
+    // pour compter le nombre de case blanches
+    for (int i = 0; i < L*M; i++)
+    {
+        if (Grille[i] == '0')
+        {
+            CaseB++;
+            id = i;
+        }
+    }
 
+    if (CaseB !=  0)
+    {
+        Grille[id] = '2'; // on marque la case blanche
+        push(id); // on empile la valeur 
+    }
+    else
+    {
+        printf("Erreur (aucune case blanche");
+        verif = 1;
+    }
+
+    // pour remplacer toutes les cases avec la valeur 2  par 0
+    for (int id = 0; id < L*M; id++)
+    {
+        if (Grille[id] == '2')
+        {
+            Grille[id] = '0';
+            CaseMarq++;
+        }
+    }
+
+    //vérification que le nombre de cases blanches est égale aux nombres de cases Marquée
+    if (CaseB == CaseMarq)
+    {
+        verif = 1;
+    }
+    
+    // si la valeur retournée est 1 alors les cases blanches sont toutes connectées, sinon 0
+    return verif; 
+}
 
 int main()
 {   
-    modifie(1,1,'1');
-    modifie(1,2,'1');
-    affiche();
     return 0;
 }

@@ -2,17 +2,11 @@
 #include <stdlib.h>
 
 
-#define C 4//Longueur de la grille (nombre de colonnes)
-#define L 3//Largeur de la grille (nombre dee lignes)
+#define L 4//Longueur de la grille (nombre de colonnes)
+#define M 3//Largeur de la grille (nombre dee lignes)
 
-char Grille[C*L] = {'0','0','0','0','0','1','1','0','0','0','0', '0'};
+char Grille[L*M] = {'0','0','0','0','0','1','1','0','0','0','0', '0'};
 
-int getID(int,int);
-int getLigne(int);
-int getCol(int);
-void modifie(int,int,char);
-char lit(int,int);
-void affiche();
 
 //retourne l'identifiant d'une case dont on donne les coordonnées
 int getID(int ligne, int colonne)
@@ -27,7 +21,7 @@ int getLigne(int id)
     int lgn = 0; //pour récupérer la coordonnée correspondant à la ligne
     for (int i = 0; i < id; i++)
     {
-        if (col != C) col = col + 1;
+        if (col != M) col = col + 1;
         else 
             {
                 col = 0;
@@ -68,11 +62,11 @@ char lit(int ligne, int colonne)
 
 //affiche la grille
 void affiche()
-{   for (int i = -1; i <= L; i++)
+{   for (int i = -1; i <= M; i++)
     {
-        for (int j = -1; j <= C; j++)
+        for (int j = -1; j <= L; j++)
         {      
-            if (i == -1 || j == -1 || i == L || j == C)
+            if (i == -1 || j == -1 || i == M || j == L)
             {
                 printf("%c ", AFF_BORD);
             }

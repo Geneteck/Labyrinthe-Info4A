@@ -2,15 +2,30 @@
 #include <stdlib.h>
 
 
-#define L 4//Longueur de la grille (nombre de colonnes)
-#define M 3//Largeur de la grille (nombre dee lignes)
+#define L 3//Longueur de la grille (nombre de colonnes)
+#define M 4//Largeur de la grille (nombre dee lignes)
 
-char Grille[L*M] = {'0'};
+char Grille[L*M] = {0};
+
+int getID(int,int);
+int getLigne(int);
+int getCol(int);
+void modifie(int,int,char);
+char lit(int,int);
+void affiche();
 
 //retourne l'identifiant d'une case dont on donne les coordonnées
 int getID(int ligne, int colonne)
 {   
-    return ligne*colonne;
+    int col, lgn, nbr = 0;
+    while(col != colonne & lgn != ligne)
+    {   
+        if (lgn < ligne) {lgn = 0;}
+        nbr = nbr +1;
+        col = col+1;
+        lgn = col+1;
+    }
+    return nbr;
 }
 
 //retourne la première coordonée (ligne) d'une case dont on donne l'identifiant
@@ -45,14 +60,13 @@ int getColonne(int id)
 //place la valeur x dans le case de coordonnée (i,j)
 void modifie(int ligne, int colonne, char x)
 {
-    int val = getID(ligne, colonne);
-    Grille[val] = x ;
+    Grille[getID(ligne, colonne)] = x ;
 }
 
 //retourne la valeur de la case de coordonnées (i,j)
 char lit(int ligne, int colonne)
 {
-    return Grille[ligne*colonne];
+    return Grille[getID(ligne,colonne)];
 }
 
 
@@ -63,23 +77,7 @@ char lit(int ligne, int colonne)
 
 //affiche la grille
 void affiche()
-{
-    for (int i=0; i<M; i++)
-    {
-        for (int j = 0; j < L; j++)
-        {   
-            int val = i*j;
-            if (lit(i,j) == (char)0) 
-               { 
-                   printf("%c%c ",AFF_MUR, AFF_BORD);
-               }
-            else if (lit(i,j) == (char)1) 
-               { 
-                   printf("%c%c ",AFF_VIDE, AFF_BORD); 
-                }
-        }
-        printf("\n");
-    }
+{   
 }
 
 // Test fonction getID
@@ -109,7 +107,6 @@ int test_modifie(int ligne, int colonne, char x)
 
 int main()
 {   
-    modifie(0,1,(char)1);
-    affiche();
+    test_getID(2,2);
     return 0;
 }

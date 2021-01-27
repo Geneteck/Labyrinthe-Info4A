@@ -2,10 +2,10 @@
 #include <stdlib.h>
 
 
-#define L 3//Longueur de la grille (nombre de colonnes)
-#define M 4//Largeur de la grille (nombre dee lignes)
+#define C 4//Longueur de la grille (nombre de colonnes)
+#define L 3//Largeur de la grille (nombre dee lignes)
 
-char Grille[L*M] = {0};
+char Grille[C*L] = {'0','0','0','0','0','1','1','0','0','0','0', '0'};
 
 int getID(int,int);
 int getLigne(int);
@@ -16,16 +16,8 @@ void affiche();
 
 //retourne l'identifiant d'une case dont on donne les coordonnées
 int getID(int ligne, int colonne)
-{   
-    int col, lgn, nbr = 0;
-    while(col != colonne & lgn != ligne)
-    {   
-        if (lgn < ligne) {lgn = 0;}
-        nbr = nbr +1;
-        col = col+1;
-        lgn = col+1;
-    }
-    return nbr;
+{  
+   return 4*ligne+colonne;
 }
 
 //retourne la première coordonée (ligne) d'une case dont on donne l'identifiant
@@ -35,7 +27,7 @@ int getLigne(int id)
     int lgn = 0; //pour récupérer la coordonnée correspondant à la ligne
     for (int i = 0; i < id; i++)
     {
-        if (col != M) col = col + 1;
+        if (col != C) col = col + 1;
         else 
             {
                 col = 0;
@@ -51,7 +43,7 @@ int getColonne(int id)
     int col = 0; //pour récupérer la coordonnée correspondant à la colonne
     for (int i = 0; i < id; i++)
     {
-        if (col != M) col = col + 1;
+        if (col != L) col = col + 1;
         else col = 0 ;
     } 
     return col ;
@@ -69,7 +61,6 @@ char lit(int ligne, int colonne)
     return Grille[getID(ligne,colonne)];
 }
 
-
 // Pour l'affichage du labyrtinthe en ligne de commande 
 #define AFF_VIDE '-' //Caractère représentant les cases vides pour l'affichage
 #define AFF_MUR 'X' //Caractère représentant les murs pour l'affichage
@@ -77,36 +68,32 @@ char lit(int ligne, int colonne)
 
 //affiche la grille
 void affiche()
-{   
-}
+{   for (int i = -1; i <= L; i++)
+    {
+        for (int j = -1; j <= C; j++)
+        {      
+            if (i == -1 || j == -1 || i == L || j == C)
+            {
+                printf("%c ", AFF_BORD);
+            }
+            else if (lit(i,j) == '0')
+                {
+                    printf("%c", AFF_VIDE);
+                }
+            else if (lit(i,j) == '1')
+            {
+                printf("%c", AFF_MUR);
+            }
+        }
+        printf("\n");
+    }
 
-// Test fonction getID
-void test_getID(int ligne, int colonne)
-{   
-    printf("%d\n", colonne*ligne);
-}
-
-// Test fonction getLigne
-void test_getLigne(int id)
-{   
-    printf("%d\n", getLigne(id));
-}
-
-// Test fonction getColonne
-void test_getColonne(int id)
-{   
-    printf("%d\n", getColonne(id));
-}
-
-// test fonction modifie
-int test_modifie(int ligne, int colonne, char x)
-{   
-    modifie(ligne, colonne, x);
-    printf("%c\n", lit(ligne, colonne));
 }
 
 int main()
 {   
-    test_getID(2,2);
+    modifie(1,1,'1');
+    modifie(1,2,'1');
+    affiche();
     return 0;
 }

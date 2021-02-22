@@ -68,7 +68,7 @@ void affiche()
         {      
             if (i == -1 || j == -1 || i == NB_LIGNES || j ==  NB_COLONNES)
             {
-                printf("%c ", AFF_BORD);
+                printf("%c", AFF_BORD);
             }
             else if (lit(i,j) == 0)
                 {

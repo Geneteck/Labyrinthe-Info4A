@@ -2,10 +2,11 @@
 #include <stdlib.h>
 
 
-#define L 4//Longueur de la grille (nombre de colonnes)
-#define M 3//Largeur de la grille (nombre dee lignes)
+int NB_COLONNES = 4;//Longueur
+int NB_LIGNES = 3; //largeur
 
-char Grille[L*M] = {'0','0','0','0','0','1','1','0','0','0','0', '0'};
+char* Grille=NULL;
+
 
 //retourne l'identifiant d'une case dont on donne les coordonnées
 int getID(int ligne, int colonne)
@@ -20,7 +21,7 @@ int getLigne(int id)
     int lgn = 0; //pour récupérer la coordonnée correspondant à la ligne
     for (int i = 0; i < id; i++)
     {
-        if (col != M) col = col + 1;
+        if (col != NB_LIGNES) col = col + 1;
         else 
             {
                 col = 0;
@@ -36,7 +37,7 @@ int getColonne(int id)
     int col = 0; //pour récupérer la coordonnée correspondant à la colonne
     for (int i = 0; i < id; i++)
     {
-        if (col != L) col = col + 1;
+        if (col != NB_COLONNES) col = col + 1;
         else col = 0 ;
     } 
     return col ;
@@ -57,23 +58,23 @@ char lit(int ligne, int colonne)
 // Pour l'affichage du labyrtinthe en ligne de commande 
 #define AFF_VIDE '-' //Caractère représentant les cases vides pour l'affichage
 #define AFF_MUR 'X' //Caractère représentant les murs pour l'affichage
-#define AFF_BORD ' ' //Caractère représentant les bords pour l'affichage 
+#define AFF_BORD '+' //Caractère représentant les bords pour l'affichage 
 
 //affiche la grille
 void affiche()
-{   for (int i = -1; i <= M; i++)
+{   for (int i = -1; i <= NB_LIGNES; i++)
     {
-        for (int j = -1; j <= L; j++)
+        for (int j = -1; j <= NB_COLONNES; j++)
         {      
-            if (i == -1 || j == -1 || i == M || j == L)
+            if (i == -1 || j == -1 || i == NB_LIGNES || j ==  NB_COLONNES)
             {
                 printf("%c ", AFF_BORD);
             }
-            else if (lit(i,j) == '0')
+            else if (lit(i,j) == 0)
                 {
                     printf("%c", AFF_VIDE);
                 }
-            else if (lit(i,j) == '1')
+            else if (lit(i,j) == 1)
             {
                 printf("%c", AFF_MUR);
             }
@@ -82,8 +83,6 @@ void affiche()
     }
 
 }
-
-
 
 int Pile[L*M];
 int Sommet;

@@ -58,7 +58,7 @@ char lit(int ligne, int colonne)
 // Pour l'affichage du labyrtinthe en ligne de commande 
 #define AFF_VIDE '-' //Caractère représentant les cases vides pour l'affichage
 #define AFF_MUR 'X' //Caractère représentant les murs pour l'affichage
-#define AFF_BORD ' ' //Caractère représentant les bords pour l'affichage 
+#define AFF_BORD '+' //Caractère représentant les bords pour l'affichage 
 
 //affiche la grille
 void affiche()

@@ -1,3 +1,5 @@
+// Partie 1 de Loïc Salaï
+
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -7,6 +7,11 @@ int NB_LIGNES = 3; //largeur
 
 char* Grille=NULL;
 
+// Pour l'affichage du labyrtinthe en ligne de commande 
+#define AFF_VIDE '-' //Caractère représentant les cases vides pour l'affichage
+#define AFF_MUR 'X' //Caractère représentant les murs pour l'affichage
+#define AFF_BORD '+' //Caractère représentant les bords pour l'affichage 
+
 
 //retourne l'identifiant d'une case dont on donne les coordonnées
 int getID(int ligne, int colonne)
@@ -55,11 +60,6 @@ char lit(int ligne, int colonne)
     return Grille[getID(ligne,colonne)];
 }
 
-// Pour l'affichage du labyrtinthe en ligne de commande 
-#define AFF_VIDE '-' //Caractère représentant les cases vides pour l'affichage
-#define AFF_MUR 'X' //Caractère représentant les murs pour l'affichage
-#define AFF_BORD '+' //Caractère représentant les bords pour l'affichage 
-
 //affiche la grille
 void affiche()
 {   for (int i = -1; i <= NB_LIGNES; i++)
@@ -83,6 +83,7 @@ void affiche()
     }
 
 }
+
 
 int Pile[L*M];
 int Sommet;

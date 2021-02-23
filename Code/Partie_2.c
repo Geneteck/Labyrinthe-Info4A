@@ -26,6 +26,9 @@ int NB_COLONNES = 2; // Correspond aux nombres de colonnes du labyrinthe
 int NB_LIGNES = 3; // Correspond aux nombres de lignes du labyrinthe
 char* Grille=NULL;
 
+int* Pile = NULL;
+int Sommet = 0;
+
 /* 
     La fonction getID retourne un entier qui est l'indice de la case dans à la ligne et la colonne indiqué en paramètres
     Paramètres : le numéro de ligne et le numéro de colonne
@@ -120,21 +123,21 @@ void affiche()
 
 }
 
+/* 
+    La fonction push permet de concaténer l'indice de la case sélectionner dans Pile
+    Paramètre : l'indice de la case que l'on concatène dans Pile
+*/
 
-
-int* Pile = NULL;
-int Sommet = 0;
-
-// Partie 2 du Projet
-
-//empile un entier
 void push(int x)    
 {   
     Pile[Sommet] = x;
     Sommet++; 
 }
 
-//depile un entier et le retourne
+/*
+    La fonction pop retourne le dernier entier qui a été concaténer dans la pile (Pile)
+*/
+
 int pop()
 {   
     Sommet--; 
@@ -142,7 +145,11 @@ int pop()
     return val;
 }
 
-// dépile un entier et le retournes
+/* 
+
+
+*/
+
 int connexe()
 {   
     int CaseB, CaseMarq, verif, id = 0;
@@ -186,6 +193,11 @@ int connexe()
     
     // si la valeur retournée est 1 alors les cases blanches sont toutes connectées, sinon 0
     return verif; 
+}
+
+void genLaby(int k)
+{
+
 }
 
 int main()

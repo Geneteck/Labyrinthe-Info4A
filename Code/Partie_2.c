@@ -22,9 +22,9 @@ char AFF_VIDE = '-';
 char AFF_MUR = 'X'; 
 char AFF_BORD ='+';  
 
-int NB_COLONNES = 2; // Correspond aux nombres de colonnes du labyrinthe
+int NB_COLONNES = 10; // Correspond aux nombres de colonnes du labyrinthe
 int NB_LIGNES = 3; // Correspond aux nombres de lignes du labyrinthe
-char* Grille=NULL;
+char* Grille = NULL;
 
 int* Pile = NULL;
 int Sommet = 0;
@@ -124,14 +124,14 @@ void affiche()
 }
 
 /* 
-    La fonction push permet de concaténer l'indice de la case sélectionner dans Pile
+    La fonction push permet de concaténer/empiler l'indice de la case sélectionner dans Pile
     Paramètre : l'indice de la case que l'on concatène dans Pile
 */
 
 void push(int x)    
 {   
-    Pile[Sommet] = x;
     Sommet++; 
+    Pile[Sommet] = x;
 }
 
 /*
@@ -146,59 +146,80 @@ int pop()
 }
 
 /* 
-
-
+    La fonction connexe permet de déterminer si toutes les cases blanches sont connexes (1) ou pas (0)
+    - Elle en renvoie un entier : 1 si les cases blanches sont connexes et 0 dans le cas contraire
+    
 */
 
 int connexe()
 {   
-    int CaseB, CaseMarq, verif, id = 0;
+    int verif = 1;
+    int CaseB, CaseMarq, id = 0;
 
-    // pour compter le nombre de case blanches
-    for (int i = 0; i < NB_COLONNES*NB_LIGNES; i++)
+    for (int i = 0; i < NB_COLONNES*NB_LIGNES; i++) // Boucle qui compte le nombre de case blanches
     {
-        if (Grille[i] == '0')
-        {
+        if (Grille[i] == "0")
+        {   
             CaseB++;
             id = i;
         }
     }
-
-    if (CaseB !=  0)
-    {
-        Grille[id] = '2'; // on marque la case blanche
-        push(id); // on empile la valeur 
+    printf("Il y a %d cases blanches",CaseB);
+    if (CaseB !=  0) // Vérifie si le nombre de cases blanches est différent de 0
+    {   
+          while(Sommet!=0) // Tant que la pile n'est pas vide 
+          {
+              Grille[id] = "2"; // La case est "marquée" dans la grille
+              // Vérification de la case à droite de l'indice courant
+              if(Grille[id+1]=="0" && getLigne(id)==getLigne(id+1) && id+1<NB_COLONNES*NB_LIGNES) 
+              {   
+                  Grille[id+1] = "2";
+                  push(id+1); 
+              }
+              // Vérification de la case à gauche de l'indice courant
+              if(Grille[id-1]=="0" && getLigne(id)==getLigne(id-1) && id-1>=0)
+              {   
+                  Grille[id-1] = "2";
+                  push(id-1);
+              }
+              // Vérification de la case en haut de la case à l'indice courant
+              if(Grille[id-NB_COLONNES]=="0" && getColonne(id)==getColonne(id-NB_COLONNES) && id-NB_COLONNES>=0)
+              {   
+                  Grille[id-NB_COLONNES] = "2";
+                  push(id-NB_COLONNES);
+              }
+              // Vérification de la case en haut de la case à l'indice courant
+              if(Grille[id+NB_COLONNES]=="0" && getColonne(id)==getColonne(id+NB_COLONNES) && id+NB_COLONNES<NB_COLONNES*NB_LIGNES)
+              {  
+                 Grille[id+NB_COLONNES] = "2";
+                 push(id+NB_COLONNES); 
+              }
+              id = pop();
+          }
     }
     else
     {
-        printf("Erreur (aucune case blanche");
-        verif = 1;
+        printf("Erreur aucune case blanche"); // Message d'erreur si il n'y a aucune case blanche
+        verif = 0;
     }
 
-    // pour remplacer toutes les cases avec la valeur 2  par 0
-    for (int i = 0; i < NB_COLONNES*NB_LIGNES; i++)
+    for (int i = 0; i < NB_COLONNES*NB_LIGNES; i++) // Boucle pour placé remettre les cases marquées(2) en cases blanches (0)
     {
-        if (Grille[i] == '2')
+        if ((*Grille+i) == 2)
         {
-            Grille[i] = '0';
+            Grille[i] = "0";
             CaseMarq++;
         }
     }
-
-    //vérification que le nombre de cases blanches est égale aux nombres de cases Marquée
-    if (CaseB == CaseMarq)
+    printf("\nIl y a %d cases marquées", CaseMarq);
+    if (CaseB != CaseMarq) // Vérification que le nombre de cases blanches est égale aux nombres de cases Marquée
     {
-        verif = 1;
+        verif = 0;
     }
     
-    // si la valeur retournée est 1 alors les cases blanches sont toutes connectées, sinon 0
-    return verif; 
+    return verif; // Si verif = 1 : les cases sont blanches sont connexes. Dans le cas contraire, verif = 0
 }
 
-void genLaby(int k)
-{
-
-}
 
 int main()
 {   
@@ -217,6 +238,7 @@ int main()
     // Reste du code pour tester les fonctions
     modifie(1,1,AFF_MUR);
     affiche();
+    printf("\n%x",connexe());
 
     free(Grille);
     free(Pile);

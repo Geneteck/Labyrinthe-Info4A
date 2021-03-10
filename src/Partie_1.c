@@ -22,8 +22,8 @@ char AFF_VIDE = '-';
 char AFF_MUR = 'X'; 
 char AFF_BORD ='+';  
 
-int NB_COLONNES = 2; // Correspond aux nombres de colonnes du labyrinthe
-int NB_LIGNES = 3; // Correspond aux nombres de lignes du labyrinthe
+int NB_COLONNES = 4; // Correspond aux nombres de colonnes du labyrinthe
+int NB_LIGNES = 4; // Correspond aux nombres de lignes du labyrinthe
 char* Grille=NULL;
 
 /* 
@@ -33,6 +33,10 @@ char* Grille=NULL;
 
 int getID(int ligne, int colonne)
 {  
+   if(ligne == 0)
+   {
+       return NB_COLONNES*ligne+colonne;
+   }
    return NB_COLONNES*ligne+colonne;
 }
 
@@ -43,18 +47,8 @@ int getID(int ligne, int colonne)
 
 int getLigne(int id)
 {   
-    int col = 0; // Variable qui contiendra la coordonnée correspondant à la colonne
-    int lgn = 0; // Variable qui contiendra la coordonnée correspondant à la ligne et qui est retournée en fin de fonction
-    for (int i = 0; i < id; i++)
-    {
-        if (col != NB_LIGNES) col = col + 1;
-        else 
-            {
-                col = 0;
-                lgn = lgn+1;
-            } 
-    } 
-    return lgn ;
+    
+    return id/NB_COLONNES;
 }
 
 /* 
@@ -67,7 +61,7 @@ int getColonne(int id)
     int col = 0; // Variable qui contiendra la coordonnée correspondant à la colonne et qui sera retourné 
     for (int i = 0; i < id; i++)
     {
-        if (col != NB_COLONNES) col = col + 1;
+        if (col != NB_COLONNES-1) col = col + 1;
         else col = 0 ;
     } 
     return col ;
@@ -128,6 +122,7 @@ int main()
             modifie(i,j, AFF_VIDE);
         }
     }
+    printf("%d\n", getID(0,3));
     modifie(1,1,AFF_MUR);
     affiche();
     free(Grille);

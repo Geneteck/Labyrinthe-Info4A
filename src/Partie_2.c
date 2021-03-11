@@ -11,24 +11,27 @@ Pour l'éxécution :
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include <time.h> // package pour la fonction random
 
 /*
     On définit les caractères qui vont permettre de visualiser le labyrinthe :
     '-' pour représenter les cases vides du labyrinthe 
     'X' pour la représentation des murs du labyrinthe
     '+' pour qu'on affiche les bords du labyrinthe 
+    '2' utilisé dans la fonction connexe(), le caractère symbolise les cases marquées
 */
 char AFF_VIDE = '-'; 
 char AFF_MUR = 'X'; 
 char AFF_BORD ='+';
 char MARQUE = '2';  
-
-int NB_COLONNES = 8; // Correspond aux nombres de colonnes du labyrinthe
-int NB_LIGNES = 8; // Correspond aux nombres de lignes du labyrinthe
+                                      
+int NB_COLONNES = 78;                 // Correspond aux nombres de colonnes du labyrinthe
+int NB_LIGNES = 45;                    // Correspond aux nombres de lignes du labyrinthe
 char* Grille = NULL;
 
 int* Pile = NULL;
-int Sommet = 0;
+int Sommet = 0;          
 
 /* 
     La fonction getID retourne un entier qui est l'indice de la case dans à la ligne et la colonne indiqué en paramètres
@@ -57,7 +60,7 @@ int getLigne(int id)
 
 int getColonne(int id)
 {   
-    int col = 0; // Variable qui contiendra la coordonnée correspondant à la colonne et qui sera retourné 
+    int col = 0;                     // Variable qui contiendra la coordonnée correspondant à la colonne et qui sera retourné 
     for (int i = 0; i < id; i++)
     {
         if (col != NB_COLONNES-1) col = col + 1;
@@ -202,7 +205,6 @@ int connexe()
             CaseMarq++;
         }
     }
-    printf("\nIl y a %d cases marquées\n", CaseMarq);
     if (CaseB != CaseMarq) // Vérification que le nombre de cases blanches est égale aux nombres de cases Marquée
     {
         verif = 0;
@@ -213,12 +215,14 @@ int connexe()
 
 void genLaby(int k)
 {   
-    int randLig;
-    int randCol;
-    int verif = 0;
-    int CaseB = NB_COLONNES*NB;
-    int CaseBMax = 0;
-    int n = 0;
+    srand(time(NULL)); 
+    int lig;
+    int col;
+    int idAlea;
+    int CaseBDep = 0;
+    int CasesB = 0;
+    int nbrTour;
+    int minDist = NB_COLONNES+NB_LIGNES-1;
 
     // On remplit inititalement tout le tableau par du "Vide"
     for (int i = 0; i < NB_LIGNES; i++)
@@ -226,51 +230,67 @@ void genLaby(int k)
         for (int j = 0; j < NB_COLONNES ; j++)
         {
             modifie(i,j, AFF_VIDE);
-            CaseB++;
+            CaseBDep++;
         }
     }
 
-    // On place des mur de façons aléatoire tant que les cases blanches reste connexe
-    for (int x = 0; x < 1000; x++)
+    // On vérifie la valeur de k 
+    if (k <= minDist)
+    {
+        nbrTour = CaseBDep*k*10;
+    }
+    else if(k>minDist && k <= (CaseBDep/2))
+    {
+        nbrTour = CaseBDep-(k*2);
+    }
+    else
+    {
+        nbrTour = CaseBDep-k;
+    }
+    for (int x = 0; x <= nbrTour;x++)  // On place des mur de façons aléatoire tant que les cases blanches reste connexe
     {   
-        randLig = (int)(rand() / (double)RAND_MAX * (NB_LIGNES - 1));
-        randCol = (int)(rand() / (double)RAND_MAX * (NB_COLONNES - 1));
-        if((randLig == 0 && randCol == 0) || (randLig == NB_LIGNES-1 && randCol == NB_COLONNES-1))
+        idAlea = rand() % CaseBDep;
+        lig = getLigne(idAlea);
+        col = getColonne(idAlea);
+        if((lig == 0 && col == 0) || (lig == NB_LIGNES-1 && col == NB_COLONNES-1))
         {
-            modifie(randLig, randCol, AFF_VIDE);
+            modifie(lig, col, AFF_VIDE);
         }
-        else
-        {   
-            while(verif==0)
-            {   
-                modifie(randLig, randCol, AFF_MUR);
-                n = n+1;
-                CaseB = CaseB-1;
-                if(connexe() && c)
-                {
-                    verif = 1;
-                }
-                randLig = (int)(rand() / (double)RAND_MAX * (NB_LIGNES - 1));
-                randCol = (int)(rand() / (double)RAND_MAX * (NB_COLONNES - 1));
+        else if(lit(lig, col)!=AFF_MUR)
+        {
+            modifie(lig, col, AFF_MUR);
+            if(connexe()==0)
+            {
+                modifie(lig, col, AFF_VIDE);
+            }
+            //affiche();
+        }
+    }
+
+    // Pour compter le nombre de cases vides 
+    for (int i = 0; i < NB_LIGNES; i++)
+    {
+        for (int j = 0; j < NB_COLONNES ; j++)
+        {
+            if(lit(i,j) == AFF_VIDE)
+            {
+                CasesB++;
             }
         }
     }
-    
-       
-    
+    printf("Au départ, il y a : %d cases vides \n",CaseBDep);
+    printf("Final : %d cases vides (k = %d)\n",CasesB,k);
 }
+    
 
 int main()
 {   
     Grille = (char*)calloc(NB_LIGNES*NB_COLONNES,sizeof(char));
     Pile = (int*)calloc(NB_LIGNES*NB_COLONNES,sizeof(int));
 
-  
-    
-    genLaby(5);
+    genLaby(500);
     affiche();
-    printf("%d\n", connexe());
-    
+
     free(Grille);
     free(Pile);
     return 0;

@@ -24,10 +24,10 @@
 char AFF_VIDE = '-'; 
 char AFF_MUR = 'X'; 
 char AFF_BORD ='+';
-char MARQUE = '2';                     // 
+char MARQUE = '2';                     // Pour réaliser le marquage des cases dans la méthode connexe
                                       
-int NB_COLONNES = 45;                  // Correspond aux nombres de colonnes du labyrinthe
-int NB_LIGNES = 40;                    // Correspond aux nombres de lignes du labyrinthe
+int NB_COLONNES = 30;                  // Correspond aux nombres de colonnes du labyrinthe
+int NB_LIGNES = 15;                    // Correspond aux nombres de lignes du labyrinthe
 char* Grille = NULL;
 
 int* Pile = NULL;
@@ -146,10 +146,10 @@ int pop()
 
 int connexe()
 {   
-    int verif = 1;
-    int CaseMarq = 0;
-    int id = 0;
-    int CaseB = 0;
+    int verif = 1;              // La variable verif renvoie (en fin de méthode) : 1 si le labyrinthe est connexe, sinon 0
+    int CaseMarq = 0;           // Permettra de compter le nombre de case qui aura été marqué 
+    int id = 0;                 // Variable qui contient l'id d'une case 
+    int CaseB = 0;              // Permettra de compter le nombre de cases blanches initiales 
 
     for (int i = 0; i < NB_COLONNES*NB_LIGNES; i++) // Boucle qui compte le nombre de case blanches
     {   
@@ -164,7 +164,7 @@ int connexe()
           push(id);
           while(Sommet!=0) // Tant que la pile n'est pas vide 
           {  
-              Grille[id] = MARQUE; // La case est "marquée" dans la grille
+              Grille[id] = '1'; // La case est "marquée" dans la grille
               // Vérification de la case à droite de l'indice courant
               if(Grille[id+1]==AFF_VIDE && getLigne(id)==getLigne(id+1) && id+1<NB_COLONNES*NB_LIGNES) 
               {   
@@ -224,13 +224,11 @@ void genLaby(int k)
     srand(time(NULL)); 
     int lig;                    // Variable pour contenir la ligne de l'identifiant généré aléatoirement 
     int col;                    // Variable pour contenir la colonne de l'identifiant généré aléatoirement 
-    int idAlea;                 // Variable qui contient un indice 
-    int CaseBDep = 0;
-    int CasesB = 0;
-    int nbrTour;
-    int minDist = NB_COLONNES+NB_LIGNES-1;
+    int idAlea;                 // Variable qui contient l'indice d'une case, choisi aléatoirement 
+    int CaseBDep = 0;           // Nombre de cases blanches au départ
+    int nbrTour;                // Définie le nombre de tour que réalise la boucle pour placer des murs
 
-    // On remplit inititalement tout le tableau par du "Vide"
+    // On remplit inititalement tout le tableau par des cases vides 
     for (int i = 0; i < NB_LIGNES; i++)
     {
         for (int j = 0; j < NB_COLONNES ; j++)
@@ -241,11 +239,11 @@ void genLaby(int k)
     }
 
     // On vérifie la valeur de k 
-    if (k <= minDist)
+    if (k <= NB_COLONNES+NB_LIGNES-1)
     {
         nbrTour = CaseBDep*k;
     }
-    else if(k>minDist && k <= (CaseBDep/4))
+    else if(k>NB_COLONNES+NB_LIGNES-1 && k <= (CaseBDep/4))
     {
        nbrTour = (CaseBDep*k)/10;
     }
@@ -275,37 +273,17 @@ void genLaby(int k)
             {
                 modifie(lig, col, AFF_VIDE);
             }
-            //affiche();
         }
     }
-
-    // Pour compter le nombre de cases vides 
-    for (int i = 0; i < NB_LIGNES; i++)
-    {
-        for (int j = 0; j < NB_COLONNES ; j++)
-        {
-            if(lit(i,j) == AFF_VIDE)
-            {
-                CasesB++;
-            }
-        }
-    }
-    printf("Depart : il y a : %d cases vides \n",CaseBDep);
-    printf("Final : %d cases vides (pour k = %d)\n",CasesB,k);
-    printf("Diffence : %d\n", CasesB-k);
 }
 
-/* 
-    Le main du programme est la partie lancé à l'éxécution du programme 
-*/ 
-
-int main()
-{   
+int main() 
+{
     // Initialisation de la Grille et de la Pile au lancement du main
     Grille = (char*)calloc(NB_LIGNES*NB_COLONNES,sizeof(char));
     Pile = (int*)calloc(NB_LIGNES*NB_COLONNES,sizeof(int));
 
-    genLaby(1456);
+    genLaby(98);
     affiche();
 
     // Pour libérer les tableau Grille et Pile en fin de programme
@@ -313,3 +291,4 @@ int main()
     free(Pile);
     return 0;
 }
+

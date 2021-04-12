@@ -11,7 +11,6 @@ Pour l'éxécution :
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL2.dll>
 
 /*
     On définit les caractères qui vont permettre de visualiser le labyrinthe :
